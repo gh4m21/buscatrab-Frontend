@@ -29,6 +29,8 @@ const DetalleInfo = (props) => {
     getPublicacionTrabajo,
     publicacionTrabajo,
     user,
+    solicitudTrabajo,
+    getSolicitudTrabajo,
   } = props;
 
   const idPublicacionTrabajo = useParams();
@@ -38,6 +40,7 @@ const DetalleInfo = (props) => {
       getSolicitudTrabajo({
         idUsuario: user._id,
         idPublicacionTrabajo: idPublicacionTrabajo.id,
+        idSolicitudTrabajo: null,
       });
     });
     getPublicacionTrabajo({
@@ -202,13 +205,27 @@ const DetalleInfo = (props) => {
               <p className="text-gray-600 dark:text-gray-400">
                 {publicacionTrabajo.descripcion}
               </p>
-              <div className="mt-4 px-4 py-3 text-center sm:px-6">
-                <Link
-                  to={"../../app/EnviarPropuesta/" + publicacionTrabajo._id}
-                >
-                  <Button>Enviar Propuesta</Button>
-                </Link>
-              </div>
+
+              {solicitudTrabajo?.[0] ||
+              user.tipoUsuario === "empresa" ? null : (
+                <div className="mt-4 px-4 py-3 text-center sm:px-6">
+                  <Link
+                    to={"../../app/EnviarPropuesta/" + publicacionTrabajo._id}
+                  >
+                    <Button>Enviar Propuesta</Button>
+                  </Link>
+                </div>
+              )}
+              {/* Si es la empresa que publica el post se vea automaticamente la lista de solicitud*/}
+              {user._empresa !== publicacionTrabajo._empresa._id ? null : (
+                <div className="mt-4 px-4 py-3 text-center sm:px-6">
+                  <Link
+                    to={"../../app/listaSolicitud/" + publicacionTrabajo._id}
+                  >
+                    <Button>Ver Todos los Solicitud de Trabajo</Button>
+                  </Link>
+                </div>
+              )}
             </CardBody>
           </Card>
         </>
@@ -223,6 +240,7 @@ DetalleInfo.prototype = {
   publicacionTrabajo: PropTypes.object.isRequired,
   usuario: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
+  solicitudTrabajo: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -231,8 +249,14 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
   usuario: state.usuario.usuario,
   publicacionTrabajo: state.publicacionTrabajo.publicacionTrabajo,
+  solicitudTrabajo: state.solicitudTrabajo.solicitudTrabajo,
 });
 
-const mapDispatchToProps = { getUsuario, getPublicacionTrabajo, loadUser };
+const mapDispatchToProps = {
+  getUsuario,
+  getPublicacionTrabajo,
+  loadUser,
+  getSolicitudTrabajo,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetalleInfo);

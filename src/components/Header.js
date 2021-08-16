@@ -168,6 +168,6 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
 });
 
-const mapDispatchToProps = { loadUser };
+const mapDispatchToProps = { loadUser, logout };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

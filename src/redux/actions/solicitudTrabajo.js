@@ -43,10 +43,49 @@ export const addSolicitudTrabajo =
     }
   };
 
-/*************************** Get Publicacion Trabajo *******************************/
+/*************************** Get SolicitudTrabajo *******************************/
 export const getSolicitudTrabajo =
-  ({ idSolicitudTrabajo }) =>
+  ({ idUsuario, idPublicacionTrabajo, idSolicitudTrabajo }) =>
   async (dispatch) => {
+    dispatch({
+      type: SOLICITUDTRABAJO_FETCH_REQUEST,
+    });
+    setAuthToken(localStorage.getItem("token"));
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    let res;
+    try {
+      if (idSolicitudTrabajo) {
+        res = await axios.get(
+          API_BASE_URL + "/solicitudtrabajo/" + idSolicitudTrabajo,
+          config
+        );
+      } else {
+        const body = JSON.stringify({ idPublicacionTrabajo, idUsuario });
+        res = await axios.post(
+          API_BASE_URL + "/solicitudtrabajo/ByUsuarioAndPublicacion/",
+          body,
+          config
+        );
+      }
+
+      dispatch({
+        type: SOLICITUDTRABAJO_FETCH_SUCCESS,
+        payload: res.data.data.solicitudTrabajo,
+      });
+    } catch (error) {
+      dispatch({ type: SOLICITUDTRABAJO_FETCH_FAIL });
+    }
+  };
+
+/*************************** Get All SolicitudTrabajo *******************************/
+export const getAllSolicitudTrabajo =
+  (idPublicacionTrabajo) => async (dispatch) => {
     dispatch({
       type: SOLICITUDTRABAJO_FETCH_REQUEST,
     });
@@ -59,7 +98,7 @@ export const getSolicitudTrabajo =
 
     try {
       const res = await axios.get(
-        API_BASE_URL + "/solicitudtrabajo/" + idSolicitudTrabajo,
+        API_BASE_URL + "/customSolicitudTrabajo/" + idPublicacionTrabajo,
         config
       );
 
@@ -71,30 +110,6 @@ export const getSolicitudTrabajo =
       dispatch({ type: SOLICITUDTRABAJO_FETCH_FAIL });
     }
   };
-
-/*************************** Get All SolicitudTrabajo *******************************/
-export const getAllSolicitudTrabajo = () => async (dispatch) => {
-  dispatch({
-    type: SOLICITUDTRABAJO_FETCH_REQUEST,
-  });
-  setAuthToken(localStorage.getItem("token"));
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  try {
-    const res = await axios.get(API_BASE_URL + "/solicitudtrabajo/", config);
-
-    dispatch({
-      type: SOLICITUDTRABAJO_FETCH_SUCCESS,
-      payload: res.data.data.solicitudTrabajo,
-    });
-  } catch (error) {
-    dispatch({ type: SOLICITUDTRABAJO_FETCH_FAIL });
-  }
-};
 
 /*************************** update SolicitudTrabajo *******************************/
 export const updateSolicitudTrabajo =

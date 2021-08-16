@@ -8,8 +8,9 @@ import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { HalfCircleSpinner } from "react-epic-spinners";
 import { Redirect } from "react-router-dom";
+import SolicitudTrabajo from "../components/Form/SolicitudTrabajo";
 
-const HistorialTrabajo = (props) => {
+const ListaSolicitud = (props) => {
   const { isAuthenticated, loading, loadUser, getUsuario, usuario, user } =
     props;
 
@@ -25,7 +26,8 @@ const HistorialTrabajo = (props) => {
           {!usuario._empresa && !usuario._desempleo ? (
             <Redirect to="./editprofile" />
           ) : null}
-          <PageTitle>Historial Trabajo</PageTitle>
+          <PageTitle>Lista Solicitud</PageTitle>
+          <SolicitudTrabajo />
         </>
       ) : (
         <HalfCircleSpinner
@@ -43,7 +45,7 @@ const HistorialTrabajo = (props) => {
   );
 };
 
-HistorialTrabajo.prototype = {
+ListaSolicitud.prototype = {
   isAuthenticated: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
@@ -62,4 +64,4 @@ const mapDispatchToProps = {
   getUsuario,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HistorialTrabajo);
+export default connect(mapStateToProps, mapDispatchToProps)(ListaSolicitud);

@@ -44,7 +44,9 @@ const Propuesta = (props) => {
 
   const onSubmitCv = (e) => {
     e.preventDefault();
-    addCv(formData);
+    addCv(formData).then(() => {
+      window.location.reload();
+    });
   };
 
   const onChangeSolicitudTrabajo = (e) => {
@@ -68,7 +70,7 @@ const Propuesta = (props) => {
     <>
       <Card className="mb-8 shadow-md">
         <CardBody>
-          {!cv?.[0]._id ? (
+          {!cv?.[0]?._id ? (
             <form
               onSubmit={onSubmitCv}
               className="text-sm text-gray-600 dark:text-gray-400"

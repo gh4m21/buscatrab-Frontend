@@ -15,10 +15,11 @@ const EditProfile = lazy(() => import("../pages/EditProfile"));
 const ListaTrabajo = lazy(() => import("../pages/ListaTrabajo"));
 const AgregarTrabajo = lazy(() => import("../pages/AgregarTrabajo"));
 const VerDetalleTrabajo = lazy(() => import("../pages/VerDetalleTrabajo"));
-const HistorialTrabajo = lazy(() => import("../pages/HistorialTrabajo"));
+const ListaSolicitud = lazy(() => import("../pages/ListaSolicitud"));
 const EnviarPropuesta = lazy(() => import("../pages/EnviarPropuesta"));
 const Interview = lazy(() => import("../pages/Interview"));
 const Inicio = lazy(() => import("../pages/Inicio"));
+const VerDetalleSolicitud = lazy(() => import("../pages/VerDetalleSolicitud"));
 
 /**
  * ⚠ These are internal routes!
@@ -84,8 +85,12 @@ const routes = [
     component: VerDetalleTrabajo,
   },
   {
-    path: "/historialTrabajo",
-    component: HistorialTrabajo,
+    path: "/verDetalleSolicitud/:id",
+    component: VerDetalleSolicitud,
+  },
+  {
+    path: "/listaSolicitud/:id",
+    component: ListaSolicitud,
   },
   {
     path: "/inicio",
