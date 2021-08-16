@@ -17,7 +17,15 @@ import { addInterview } from "../../redux/actions/interview";
 import { getUsuario } from "../../redux/actions/usuario";
 
 const CrearInterview = (props) => {
-  const { isAuthenticated, loading, usuario, getUsuario, addInterview } = props;
+  const {
+    isAuthenticated,
+    loading,
+    usuario,
+    getUsuario,
+    addInterview,
+    solicitudTrabajo,
+    publicacionTrabajo,
+  } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -43,25 +51,25 @@ const CrearInterview = (props) => {
       fecha: formData.fecha,
       hora: formData.hora,
       asignacionTo: formData.asignacionTo,
+      idSolicitudTrabajo: solicitudTrabajo._id,
     }).then((formacion) => {
-      getUsuario();
+      window.location.reload();
       setIsModalOpen(false);
     });
   };
 
   return (
     <>
-      <div className="mt-4 px-4 py-3 text-right sm:px-6">
-        <Button
-          className="text-green-400 hover:text-green-700"
-          layout="outlined"
-          onClick={openModal}
-        >
-          Aceptar
-        </Button>
-      </div>
+      <Button
+        className="text-green-400 hover:text-green-700"
+        layout="outlined"
+        onClick={openModal}
+      >
+        Aceptar
+      </Button>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <form onSubmit={onSubmit}>
+          <ModalHeader>Crear Interview</ModalHeader>
           <ModalBody>
             {/*}Email,Telephone {*/}
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
@@ -71,7 +79,7 @@ const CrearInterview = (props) => {
                   className="mt-1"
                   placeholder=""
                   name="fecha"
-                  value={formData.nombreInstituto}
+                  value={formData.fecha}
                   onChange={onChange}
                   required
                 />
@@ -82,8 +90,9 @@ const CrearInterview = (props) => {
                   className="mt-1 col-4"
                   placeholder=""
                   name="hora"
-                  value={formData.carrera}
+                  value={formData.hora}
                   onChange={onChange}
+                  required
                 />
               </Label>
             </div>
@@ -92,19 +101,14 @@ const CrearInterview = (props) => {
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
               <Label>
                 <span>Nombre del Encargador</span>
-                <Select
+                <Input
                   className="mt-1"
                   placeholder=""
                   name="asignacionTo"
-                  value={formData.fechaInicial}
+                  value={formData.asignacionTo}
                   onChange={onChange}
                   required
-                >
-                  <option>Selecionar</option>
-                  {year.map((data) => {
-                    return <option value={data.value}>{data.value}</option>;
-                  })}
-                </Select>
+                />
               </Label>
             </div>
           </ModalBody>

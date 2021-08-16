@@ -19,6 +19,7 @@ import categoriaTrabajo from "./categoriaTrabajo";
 import nivelCarrera from "./nivelCarrera";
 import cv from "./cv";
 import solicitudTrabajo from "./solicitudTrabajo";
+import interview from "./interview";
 
 export default combineReducers({
   auth,
@@ -41,4 +42,5 @@ export default combineReducers({
   nivelCarrera,
   cv,
   solicitudTrabajo,
+  interview,
 });

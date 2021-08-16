@@ -19,6 +19,8 @@ import { getPublicacionTrabajo } from "../../redux/actions/publicacionTrabajo";
 import { loadUser } from "../../redux/actions/auth";
 import { getSolicitudTrabajo } from "../../redux/actions/solicitudTrabajo";
 import { getCv } from "../../redux/actions/cv";
+import CrearInterview from "../modal/CrearInterview";
+import { getInterview } from "../../redux/actions/interview";
 
 const DetalleSolicitud = (props) => {
   const {
@@ -34,6 +36,8 @@ const DetalleSolicitud = (props) => {
     getSolicitudTrabajo,
     cv,
     getCv,
+    interview,
+    getInterview,
   } = props;
 
   const idSolicitudTrabajo = useParams();
@@ -46,6 +50,7 @@ const DetalleSolicitud = (props) => {
       idSolicitudTrabajo: null,
     });
     getCv({ idUsuario: solicitudTrabajo ? solicitudTrabajo._desempleo : null });
+    getInterview({ idInterview: solicitudTrabajo._interview });
   }, []);
 
   const dataTable = [
@@ -61,6 +66,21 @@ const DetalleSolicitud = (props) => {
     {
       name: "Letra de Motivacion",
       value: solicitudTrabajo ? solicitudTrabajo.motivacion : "",
+    },
+  ];
+
+  const dataTableInterview = [
+    {
+      name: "Fecha",
+      value: interview ? interview.fecha : "",
+    },
+    {
+      name: "Hora",
+      value: interview ? interview.hora : "",
+    },
+    {
+      name: "Nombre del Encargador",
+      value: interview ? interview.asignacionTo : "",
     },
   ];
 
@@ -91,7 +111,9 @@ const DetalleSolicitud = (props) => {
                                 {data.name === "Resumen(CV)" ? (
                                   <a
                                     className="text-green-400"
-                                    href={data.value}
+                                    href={data.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                   >
                                     {data.value}
                                   </a>
@@ -108,30 +130,71 @@ const DetalleSolicitud = (props) => {
                 </TableContainer>
 
                 {solicitudTrabajo.isAceptado == null ? (
-                  <div className="mt-4 px-4 py-3 text-center sm:px-6">
-                    <Link
-                      className="mr-5"
-                      to={"../../app/interview/" + solicitudTrabajo._id}
-                    >
+                  <>
+                    <div className="mt-4 px-4 py-3 text-center sm:px-6">
+                      <CrearInterview solicitudTrabajo={solicitudTrabajo} />
+
                       <Button
-                        className="text-green-400 hover:text-green-700"
+                        className="ml-5 text-red-400 hover:text-red-700"
                         layout="outlined"
+                        onClick={() => alert("rechazado")}
                       >
-                        Aceptar
+                        Rechazar
                       </Button>
-                    </Link>
-                    <Button
-                      className="ml-5 text-red-400 hover:text-red-700"
-                      layout="outlined"
-                      onClick={() => alert("rechazado")}
-                    >
-                      Rechazar
-                    </Button>
-                  </div>
+                    </div>
+                  </>
                 ) : null}
               </p>
             </CardBody>
           </Card>
+
+          {/** Parte del interview si se acepta el interview */}
+          {solicitudTrabajo.isAceptado == true ? (
+            <>
+              <Card className="mb-8 shadow-md">
+                <CardBody>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <SectionTitle>Informacion del Interview</SectionTitle>
+                    <TableContainer className="mb-8">
+                      <Table>
+                        <TableBody>
+                          {dataTableInterview.map((data) =>
+                            data.value ? (
+                              <TableRow>
+                                <TableCell className="w-1/3">
+                                  <span className="text-sm">{data.name}</span>
+                                </TableCell>
+                                <TableCell className="w-1/2">
+                                  {" "}
+                                  <span className="text-sm overflow-hidden">
+                                    {data.value}
+                                  </span>
+                                </TableCell>
+                              </TableRow>
+                            ) : null
+                          )}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+
+                    {interview?.isAnulado == false ? (
+                      <>
+                        <div className="mt-4 px-4 py-3 text-center sm:px-6">
+                          <Button
+                            className="ml-5 text-red-400 hover:text-red-700"
+                            layout="outlined"
+                            onClick={() => alert("rechazado")}
+                          >
+                            Cancelar
+                          </Button>
+                        </div>
+                      </>
+                    ) : null}
+                  </p>
+                </CardBody>
+              </Card>
+            </>
+          ) : null}
         </>
       )}
     </>
@@ -146,6 +209,7 @@ DetalleSolicitud.prototype = {
   user: PropTypes.object.isRequired,
   solicitudTrabajo: PropTypes.object.isRequired,
   cv: PropTypes.object.isRequired,
+  interview: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -156,6 +220,7 @@ const mapStateToProps = (state) => ({
   publicacionTrabajo: state.publicacionTrabajo.publicacionTrabajo,
   solicitudTrabajo: state.solicitudTrabajo.solicitudTrabajo,
   cv: state.cv.cv,
+  interview: state.interview.interview,
 });
 
 const mapDispatchToProps = {
@@ -164,6 +229,7 @@ const mapDispatchToProps = {
   loadUser,
   getSolicitudTrabajo,
   getCv,
+  getInterview,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetalleSolicitud);
