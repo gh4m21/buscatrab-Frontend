@@ -17,10 +17,13 @@ import { PropTypes } from "prop-types";
 import { getUsuario } from "../../redux/actions/usuario";
 import { getPublicacionTrabajo } from "../../redux/actions/publicacionTrabajo";
 import { loadUser } from "../../redux/actions/auth";
-import { getSolicitudTrabajo } from "../../redux/actions/solicitudTrabajo";
+import {
+  getSolicitudTrabajo,
+  updateSolicitudTrabajo,
+} from "../../redux/actions/solicitudTrabajo";
 import { getCv } from "../../redux/actions/cv";
 import CrearInterview from "../modal/CrearInterview";
-import { getInterview } from "../../redux/actions/interview";
+import { getInterview, updateInterview } from "../../redux/actions/interview";
 
 const DetalleSolicitud = (props) => {
   const {
@@ -34,10 +37,12 @@ const DetalleSolicitud = (props) => {
     user,
     solicitudTrabajo,
     getSolicitudTrabajo,
+    updateSolicitudTrabajo,
     cv,
     getCv,
     interview,
     getInterview,
+    updateInterview,
   } = props;
 
   const idSolicitudTrabajo = useParams();
@@ -84,6 +89,34 @@ const DetalleSolicitud = (props) => {
     },
   ];
 
+  const cancelar = () => {
+    updateInterview({
+      fecha: interview.fecha,
+      hora: interview.hora,
+      asignacionTo: interview.asignacionTo,
+      isAnulado: true,
+      isActivado: interview.isActivado,
+      isAceptado: interview.isAceptado,
+      idInterview: interview._id,
+    }).then(() => {
+      window.location.reload();
+    });
+  };
+
+  const rechazar = () => {
+    updateSolicitudTrabajo({
+      _publicacionTrabajo: solicitudTrabajo._publicacionTrabajo,
+      _desempleo: solicitudTrabajo._desempleo,
+      _cv: solicitudTrabajo._cv,
+      _interview: solicitudTrabajo._interview,
+      motivacion: solicitudTrabajo.motivacion,
+      isAceptado: false,
+      idSolicitudTrabajo: solicitudTrabajo._id,
+    }).then(() => {
+      window.location.reload();
+    });
+  };
+
   return (
     <>
       {Array.isArray(solicitudTrabajo) ? (
@@ -129,7 +162,9 @@ const DetalleSolicitud = (props) => {
                   </Table>
                 </TableContainer>
 
-                {solicitudTrabajo.isAceptado == null ? (
+                {solicitudTrabajo.isAceptado == null &&
+                user.tipoUsuario === "empresa" &&
+                user._id === publicacionTrabajo._empresa._id ? (
                   <>
                     <div className="mt-4 px-4 py-3 text-center sm:px-6">
                       <CrearInterview solicitudTrabajo={solicitudTrabajo} />
@@ -137,7 +172,7 @@ const DetalleSolicitud = (props) => {
                       <Button
                         className="ml-5 text-red-400 hover:text-red-700"
                         layout="outlined"
-                        onClick={() => alert("rechazado")}
+                        onClick={() => rechazar()}
                       >
                         Rechazar
                       </Button>
@@ -183,13 +218,25 @@ const DetalleSolicitud = (props) => {
                           <Button
                             className="ml-5 text-red-400 hover:text-red-700"
                             layout="outlined"
-                            onClick={() => alert("rechazado")}
+                            onClick={() => cancelar()}
                           >
                             Cancelar
                           </Button>
                         </div>
                       </>
-                    ) : null}
+                    ) : (
+                      <>
+                        <div className="mt-4 px-4 py-3 text-center sm:px-6">
+                          <Button
+                            className="ml-5 text-red-400 dark:text-red-900"
+                            layout="outlined"
+                            disabled
+                          >
+                            Cancelado
+                          </Button>
+                        </div>
+                      </>
+                    )}
                   </p>
                 </CardBody>
               </Card>
@@ -230,6 +277,8 @@ const mapDispatchToProps = {
   getSolicitudTrabajo,
   getCv,
   getInterview,
+  updateInterview,
+  updateSolicitudTrabajo,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetalleSolicitud);

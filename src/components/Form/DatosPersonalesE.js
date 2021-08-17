@@ -23,6 +23,12 @@ import { HalfCircleSpinner } from "react-epic-spinners";
 import SectionTitle from "../Typography/SectionTitle";
 import { getUsuario } from "../../redux/actions/usuario";
 import { pais } from "../../utils/data/pais";
+import DatePicker from "react-datepicker";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import es from "date-fns/locale/es";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
+registerLocale("es", es);
 
 const DatosPersonalesE = (props) => {
   const {
@@ -262,13 +268,22 @@ const DatosPersonalesE = (props) => {
                   </Label>
                   <Label>
                     <span>Fecha Fundacion</span>
+                    <DatePicker
+                      locale="es"
+                      onChange={(date) =>
+                        setFormData({ ...formData, fechaFundacion: date })
+                      }
+                    />
                     <Input
                       className="mt-1"
                       placeholder=""
                       name="fechaFundacion"
                       onChange={onChange}
-                      value={formData.fechaFundacion}
+                      value={moment(formData.fechaFundacion).format(
+                        "DD/MM/YYYY"
+                      )}
                       required
+                      disabled
                     />
                   </Label>
                   <Label>

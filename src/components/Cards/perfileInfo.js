@@ -1,7 +1,7 @@
 import React from "react";
 import PageTitle from "../Typography/PageTitle";
 import { CalendarIcon, LinkIcon } from "../../icons";
-import PerfileImg from "../../assets/img/perfile.jpg";
+import PerfileImg from "../../assets/img/profile.png";
 //redux
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
@@ -41,7 +41,7 @@ const DatosPersonales = (props) => {
                     <img
                       style={{ height: "9rem", width: "9rem" }}
                       className="md rounded-full relative border-2 border-gray-300"
-                      src={PerfileImg}
+                      src={usuario.foto ? usuario.foto : PerfileImg}
                       alt=""
                     />
                   </div>
@@ -122,15 +122,17 @@ const DatosPersonales = (props) => {
                   </div>
                   <div className="text-center px-3">
                     {usuario._id === user._id ? (
-                      <Button
-                        layout="outline"
-                        tag="a"
-                        href="../../app/editprofile"
-                        className="md text-xl ml-2 mr-2 mt-4"
-                        block
-                      >
-                        Editar Perfile
-                      </Button>
+                      <>
+                        <Button
+                          layout="outline"
+                          tag="a"
+                          href="../../app/editprofile"
+                          className="md text-xl ml-2 mr-2 mt-4"
+                          block
+                        >
+                          Editar Perfile
+                        </Button>
+                      </>
                     ) : null}
                   </div>
                 </div>

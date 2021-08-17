@@ -56,7 +56,7 @@ export const getAllUsuario = () => async (dispatch) => {
 
     dispatch({
       type: USUARIO_FETCH_SUCCESS,
-      payload: res.data.data.usuarios,
+      payload: res.data.data.usuario,
     });
   } catch (error) {
     dispatch({ type: USUARIO_FETCH_FAIL });
@@ -114,6 +114,38 @@ export const updateUsuario =
       dispatch({ type: USUARIO_FETCH_FAIL });
     }
   };
+
+/*************************** update Usuario *******************************/
+export const updateFoto = (formData, idUsuario) => async (dispatch) => {
+  dispatch({
+    type: USUARIO_FETCH_REQUEST,
+  });
+  setAuthToken(localStorage.getItem("token"));
+  const config = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  };
+
+  if (!idUsuario) {
+    return dispatch({ type: USUARIO_FETCH_FAIL });
+  }
+
+  try {
+    const res = await axios.put(
+      API_BASE_URL + "/usuarios/editFoto/" + idUsuario,
+      formData,
+      config
+    );
+
+    dispatch({
+      type: USUARIO_FETCH_SUCCESS,
+      payload: res.data.data.usuario,
+    });
+  } catch (error) {
+    dispatch({ type: USUARIO_FETCH_FAIL });
+  }
+};
 
 /*************************** delete Usuario *******************************/
 export const deleteUsuario =

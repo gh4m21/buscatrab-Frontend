@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 import SectionTitle from "../Typography/SectionTitle";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
-import { getAllPublicacionTrabajo } from "../../redux/actions/publicacionTrabajo";
+import { getAllPublicacionTrabajoByUserId } from "../../redux/actions/publicacionTrabajo";
 import { loadUser } from "../../redux/actions/auth";
 import { getUsuario } from "../../redux/actions/usuario";
 
-const Trabajo = (props) => {
+const TrabajoCreado = (props) => {
   const {
     isAuthenticated,
     loading,
@@ -18,13 +18,13 @@ const Trabajo = (props) => {
     publicacionTrabajo,
     loadUser,
     getUsuario,
-    getAllPublicacionTrabajo,
+    getAllPublicacionTrabajoByUserId,
   } = props;
 
   useEffect(() => {
     getUsuario().then((usuario) => {
       loadUser();
-      getAllPublicacionTrabajo();
+      getAllPublicacionTrabajoByUserId(user._empresa);
     });
   }, []);
 
@@ -81,7 +81,7 @@ const Trabajo = (props) => {
   );
 };
 
-Trabajo.prototype = {
+TrabajoCreado.prototype = {
   isAuthenticated: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   publicacionTrabajo: PropTypes.object.isRequired,
@@ -97,6 +97,10 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
 });
 
-const mapDispatchToProps = { getAllPublicacionTrabajo, getUsuario, loadUser };
+const mapDispatchToProps = {
+  getAllPublicacionTrabajoByUserId,
+  getUsuario,
+  loadUser,
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Trabajo);
+export default connect(mapStateToProps, mapDispatchToProps)(TrabajoCreado);

@@ -21,6 +21,12 @@ import {
 import SectionTitle from "../Typography/SectionTitle";
 import { getUsuario } from "../../redux/actions/usuario";
 import { pais } from "../../utils/data/pais";
+import DatePicker from "react-datepicker";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import es from "date-fns/locale/es";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
+registerLocale("es", es);
 
 const DatosPersonalesD = (props) => {
   const {
@@ -153,8 +159,10 @@ const DatosPersonalesD = (props) => {
     e.preventDefault();
     if (usuario?._desempleo || usuario?._empresa) {
       editProfile();
+      window.location.reload();
     } else {
       crearProfile();
+      window.location.reload();
     }
   };
 
@@ -272,13 +280,20 @@ const DatosPersonalesD = (props) => {
               </Label>
               <Label>
                 <span>Fecha Nacimiento</span>
+                <DatePicker
+                  locale="es"
+                  onChange={(date) =>
+                    setFormData({ ...formData, fechaNacimiento: date })
+                  }
+                />
                 <Input
                   className="mt-1"
                   placeholder=""
                   name="fechaNacimiento"
                   onChange={onChange}
-                  value={formData.fechaNacimiento}
+                  value={moment(formData.fechaNacimiento).format("DD/MM/YYYY")}
                   required
+                  disabled
                 />
               </Label>
               <Label>

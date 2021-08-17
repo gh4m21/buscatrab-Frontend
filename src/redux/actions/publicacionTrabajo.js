@@ -127,6 +127,34 @@ export const getAllPublicacionTrabajo = () => async (dispatch) => {
   }
 };
 
+/*************************** Get All PublicacionTrabajo By User Id *******************************/
+export const getAllPublicacionTrabajoByUserId =
+  (idEmpresa) => async (dispatch) => {
+    dispatch({
+      type: PUBLICACIONTRABAJO_FETCH_REQUEST,
+    });
+    setAuthToken(localStorage.getItem("token"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const res = await axios.get(
+        API_BASE_URL + "/publicaciontrabajo/getByUser/" + idEmpresa,
+        config
+      );
+
+      dispatch({
+        type: PUBLICACIONTRABAJO_FETCH_SUCCESS,
+        payload: res.data.data.publicacionTrabajo,
+      });
+    } catch (error) {
+      dispatch({ type: PUBLICACIONTRABAJO_FETCH_FAIL });
+    }
+  };
+
 /*************************** update PublicacionTrabajo *******************************/
 export const updatePublicacionTrabajo =
   ({

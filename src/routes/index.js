@@ -13,9 +13,13 @@ const Blank = lazy(() => import("../pages/Blank"));
 const Profile = lazy(() => import("../pages/Profile"));
 const EditProfile = lazy(() => import("../pages/EditProfile"));
 const ListaTrabajo = lazy(() => import("../pages/ListaTrabajo"));
+const ListaTrabajoCreado = lazy(() => import("../pages/ListaTrabajoCreado"));
 const AgregarTrabajo = lazy(() => import("../pages/AgregarTrabajo"));
 const VerDetalleTrabajo = lazy(() => import("../pages/VerDetalleTrabajo"));
 const ListaSolicitud = lazy(() => import("../pages/ListaSolicitud"));
+const ListaSolicitudEnviado = lazy(() =>
+  import("../pages/ListaSolicitudEnviado")
+);
 const EnviarPropuesta = lazy(() => import("../pages/EnviarPropuesta"));
 const Interview = lazy(() => import("../pages/Interview"));
 const Inicio = lazy(() => import("../pages/Inicio"));
@@ -33,42 +37,6 @@ const VerDetalleSolicitud = lazy(() => import("../pages/VerDetalleSolicitud"));
  */
 const routes = [
   {
-    path: "/dashboard", // the url
-    component: Dashboard, // view rendered
-  },
-  {
-    path: "/forms",
-    component: Forms,
-  },
-  {
-    path: "/cards",
-    component: Cards,
-  },
-  {
-    path: "/charts",
-    component: Charts,
-  },
-  {
-    path: "/buttons",
-    component: Buttons,
-  },
-  {
-    path: "/modals",
-    component: Modals,
-  },
-  {
-    path: "/tables",
-    component: Tables,
-  },
-  {
-    path: "/404",
-    component: Page404,
-  },
-  {
-    path: "/blank",
-    component: Blank,
-  },
-  {
     path: "/profile/:id",
     component: Profile,
   },
@@ -81,6 +49,10 @@ const routes = [
     component: ListaTrabajo,
   },
   {
+    path: "/listaTrabajoCreado",
+    component: ListaTrabajoCreado,
+  },
+  {
     path: "/verDetalleTrabajo/:id",
     component: VerDetalleTrabajo,
   },
@@ -91,6 +63,10 @@ const routes = [
   {
     path: "/listaSolicitud/:id",
     component: ListaSolicitud,
+  },
+  {
+    path: "/listaSolicitudEnviado/",
+    component: ListaSolicitudEnviado,
   },
   {
     path: "/inicio",

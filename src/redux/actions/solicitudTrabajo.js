@@ -111,6 +111,35 @@ export const getAllSolicitudTrabajo =
     }
   };
 
+/*************************** Get All SolicitudTrabajo By desempleo *******************************/
+export const getAllSolicitudTrabajoByDesempleo =
+  ({ idDesempleo }) =>
+  async (dispatch) => {
+    dispatch({
+      type: SOLICITUDTRABAJO_FETCH_REQUEST,
+    });
+    setAuthToken(localStorage.getItem("token"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const res = await axios.get(
+        API_BASE_URL + "/customSolicitudTrabajo/byDesempleo/" + idDesempleo,
+        config
+      );
+
+      dispatch({
+        type: SOLICITUDTRABAJO_FETCH_SUCCESS,
+        payload: res.data.data.solicitudTrabajo,
+      });
+    } catch (error) {
+      dispatch({ type: SOLICITUDTRABAJO_FETCH_FAIL });
+    }
+  };
+
 /*************************** update SolicitudTrabajo *******************************/
 export const updateSolicitudTrabajo =
   ({

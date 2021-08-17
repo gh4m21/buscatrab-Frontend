@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
+import { updateFoto } from "../../redux/actions/usuario";
 import {
   Card,
   CardBody,
@@ -13,7 +14,27 @@ import SectionTitle from "../Typography/SectionTitle";
 import { AvatarIcon } from "../../icons";
 
 const InformacionProfile = (props) => {
-  const { isAuthenticated, loading } = props;
+  const { isAuthenticated, loading, usuario, updateFoto } = props;
+
+  const [file, setFile] = useState("");
+  const [fileName, setFileName] = useState("Click para agregar imagen");
+  const [previewFile, setPreviewFile] = useState("");
+
+  const onChangeFoto = (e) => {
+    setFile(e.target.files[0]);
+    setFileName(e.target.files[0].name);
+    setPreviewFile(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const onSubmitFoto = () => {
+    updateFoto(formData, usuario._id).then(() => {
+      window.location.reload();
+    });
+  };
+
   return (
     <>
       <Card className="mb-8 shadow-md">
@@ -26,24 +47,36 @@ const InformacionProfile = (props) => {
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   <div className="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
                     <span className="inline-block h-20 w-20 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-900">
-                      <AvatarIcon />
+                      {previewFile ? (
+                        <img src={previewFile} alt="preview_foto" />
+                      ) : usuario.foto ? (
+                        <img src={usuario.foto} alt="preview_foto" />
+                      ) : (
+                        <AvatarIcon />
+                      )}
                     </span>
                     <Label className="px-6 pt-5 pb-6 border-2 border-blue-300 border-dashed rounded-md">
                       <Input
                         type="file"
                         className="mt-1"
-                        placeholder="foto"
-                        name="foto"
+                        placeholder=""
+                        name="file"
                         id="img"
                         style={{ display: "none" }}
+                        accept="image/png,image/jpg,image/jpeg"
+                        onChange={onChangeFoto}
                       />
-                      <label for="img">Click para agregar imagen</label>
+                      <label for="img">{fileName}</label>
                       <p className="text-xs text-gray-500">
-                        PNG, JPG, GIF up to 10MB
+                        PNG, JPG,JPEG up to 5MB
                       </p>
                     </Label>
                     <Label>
-                      <Button type="button" layout="outline">
+                      <Button
+                        onClick={() => onSubmitFoto()}
+                        type="button"
+                        layout="outline"
+                      >
                         Cambiar
                       </Button>
                     </Label>
@@ -94,13 +127,15 @@ const InformacionProfile = (props) => {
 InformacionProfile.prototype = {
   isAuthenticated: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
+  usuario: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   loading: state.auth.loading,
+  usuario: state.usuario.usuario,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { updateFoto };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InformacionProfile);

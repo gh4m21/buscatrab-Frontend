@@ -8,7 +8,7 @@ import { HalfCircleSpinner } from "react-epic-spinners";
 import ImageLight from "../assets/img/login-white.jpg";
 import ImageDark from "../assets/img/login-office-dark.jpeg";
 import { GoogleIcon } from "../icons";
-import { Label, Input, Button } from "@windmill/react-ui";
+import { Label, Input, Button, HelperText } from "@windmill/react-ui";
 
 //redux
 import { login } from "../redux/actions/auth";

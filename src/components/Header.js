@@ -21,13 +21,17 @@ import {
 } from "@windmill/react-ui";
 import { logout, loadUser } from "../redux/actions/auth";
 import { connect } from "react-redux";
+import PerfileImg from "../assets/img/profile.png";
 
-const Header = ({ logout, user }) => {
+const Header = ({ logout, user, usuario }) => {
   const { mode, toggleMode } = useContext(WindmillContext);
   const { toggleSidebar } = useContext(SidebarContext);
 
   const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+
+  //Make the search
+  const [searchTerm, setSearchTerm] = useState("");
 
   function handleNotificationsClick() {
     setIsNotificationsMenuOpen(!isNotificationsMenuOpen);
@@ -124,7 +128,7 @@ const Header = ({ logout, user }) => {
             >
               <Avatar
                 className="align-middle"
-                src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
+                src={user?.foto ? user.foto : PerfileImg}
                 alt=""
                 aria-hidden="true"
               />
@@ -166,6 +170,7 @@ const Header = ({ logout, user }) => {
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  usuario: state.usuario.usuario,
 });
 
 const mapDispatchToProps = { loadUser, logout };

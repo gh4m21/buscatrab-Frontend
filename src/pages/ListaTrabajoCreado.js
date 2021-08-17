@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import PageTitle from "../components/Typography/PageTitle";
 //redux
 import { loadUser } from "../redux/actions/auth";
-import { getUsuario, getAllUsuario } from "../redux/actions/usuario";
-import { getAllPublicacionTrabajo } from "../redux/actions/publicacionTrabajo";
-import { getAllSolicitudTrabajo } from "../redux/actions/solicitudTrabajo";
+import { getUsuario } from "../redux/actions/usuario";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { HalfCircleSpinner } from "react-epic-spinners";
 import { Redirect } from "react-router-dom";
-import Estadistica from "../components/Cards/Estadistica";
+import TrabajoCreado from "../components/Cards/TrabajoCreado";
+import { getAllPublicacionTrabajoByUserId } from "../redux/actions/publicacionTrabajo";
 
-const Inicio = (props) => {
+const ListaTrabajoCreado = (props) => {
   const {
     isAuthenticated,
     loading,
@@ -20,20 +19,16 @@ const Inicio = (props) => {
     getUsuario,
     usuario,
     user,
-    getAllPublicacionTrabajo,
-    getAllSolicitudTrabajo,
-    getAllUsuario,
+    getAllPublicacionTrabajoByUserId,
     publicacionTrabajo,
-    solicitudTrabajo,
   } = props;
-
-  const [countUser, setCountUser] = useState([]);
-  const [countSolicitud, setCountSolicitud] = useState([]);
-  const [countTrabajo, setCountTrabajo] = useState([]);
 
   useEffect(() => {
     getUsuario().then((usuario) => {
       loadUser();
+      getAllPublicacionTrabajoByUserId({
+        idEmpresa: user?._empresa ? user._empresa : "",
+      });
     });
   }, []);
   return (
@@ -43,8 +38,12 @@ const Inicio = (props) => {
           {!usuario._empresa && !usuario._desempleo ? (
             <Redirect to="./editprofile" />
           ) : null}
-          <PageTitle>Inicio</PageTitle>
-          <Estadistica usuario={usuario} />
+          {!usuario._empresa ? <Redirect to="./listaTrabajo" /> : null}
+          <PageTitle>Lista Trabajo Creado</PageTitle>
+          <TrabajoCreado
+            usuario={usuario}
+            publicacionTrabajo={publicacionTrabajo}
+          />
         </>
       ) : (
         <HalfCircleSpinner
@@ -62,11 +61,12 @@ const Inicio = (props) => {
   );
 };
 
-Inicio.prototype = {
+ListaTrabajoCreado.prototype = {
   isAuthenticated: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
   usuario: PropTypes.object.isRequired,
+  publicacionTrabajo: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -74,14 +74,13 @@ const mapStateToProps = (state) => ({
   usuario: state.usuario.usuario,
   isAuthenticated: state.auth.isAuthenticated,
   loading: state.auth.loading,
+  publicacionTrabajo: state.publicacionTrabajo.publicacionTrabajo,
 });
 
 const mapDispatchToProps = {
   loadUser,
   getUsuario,
-  getAllPublicacionTrabajo,
-  getAllSolicitudTrabajo,
-  getAllUsuario,
+  getAllPublicacionTrabajoByUserId,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Inicio);
+export default connect(mapStateToProps, mapDispatchToProps)(ListaTrabajoCreado);

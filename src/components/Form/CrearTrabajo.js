@@ -24,6 +24,13 @@ import { experienciaTrabajo } from "../../utils/data/experienciaTrabajo";
 import { lenguajeData } from "../../utils/data/lenguajeData";
 import { tipoContrato } from "../../utils/data/tipoContrato";
 import { periodoTiempo } from "../../utils/data/periodoTiempo";
+import DatePicker from "react-datepicker";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import es from "date-fns/locale/es";
+import moment from "moment";
+import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "react-toastify";
+registerLocale("es", es);
 
 const CrearTrabajo = (props) => {
   const {
@@ -90,6 +97,8 @@ const CrearTrabajo = (props) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const [startDate, setStartDate] = useState(new Date());
+
   const crearPublicacionTrabajo = () => {
     addPublicacionTrabajo({
       titulo: formData.titulo,
@@ -109,6 +118,14 @@ const CrearTrabajo = (props) => {
       cantidadPersonas: formData.cantidadPersonas,
       fechaInicial: formData.fechaInicial,
       fechaFinal: formData.fechaFinal,
+    }).then(() => {
+      if (publicacionTrabajo) {
+        window.location.href = "../../app/listaTrabajo";
+      } else {
+        toast.error(
+          "Error al creado la Publicacion Trabajo. Re intentar de nuevo"
+        );
+      }
     });
   };
 
@@ -376,24 +393,38 @@ const CrearTrabajo = (props) => {
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
               <Label>
                 <span>Fecha Inicial</span>
+                <DatePicker
+                  locale="es"
+                  onChange={(date) =>
+                    setFormData({ ...formData, fechaInicial: date })
+                  }
+                />
                 <Input
                   className="mt-1"
                   placeholder=""
                   name="fechaInicial"
-                  value={formData.fechaInicial}
+                  value={moment(formData.fechaInicial).format("DD/MM/YYYY")}
                   onChange={onChange}
                   required
+                  disabled
                 />
               </Label>
               <Label>
                 <span>Fecha Final</span>
+                <DatePicker
+                  locale="es"
+                  onChange={(date) =>
+                    setFormData({ ...formData, fechaFinal: date })
+                  }
+                />
                 <Input
                   className="mt-1 col-4"
                   placeholder=""
                   name="fechaFinal"
-                  value={formData.fechaFinal}
+                  value={moment(formData.fechaFinal).format("DD/MM/YYYY")}
                   onChange={onChange}
                   required
+                  disabled
                 />
               </Label>
             </div>

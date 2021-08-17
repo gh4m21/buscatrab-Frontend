@@ -7,35 +7,29 @@
  */
 const routes = [
   {
-    path: "/app/dashboard", // the url
-    icon: "HomeIcon", // the component being exported from icons/index.js
-    name: "Dashboard", // name that appear in Sidebar
-  },
-  {
     path: "/app/inicio", // the url
     icon: "HomeIcon", // the component being exported from icons/index.js
     name: "Inicio", // name that appear in Sidebar
   },
   {
     path: "/app/listaTrabajo", // the url
-    icon: "FormsIcon", // the component being exported from icons/index.js
+    icon: "ListIcon1", // the component being exported from icons/index.js
     name: "Lista Trabajo", // name that appear in Sidebar
   },
   {
     path: "/app/agregarTrabajo",
-    icon: "CardsIcon",
+    icon: "AddIcon",
     name: "Crear Trabajo",
   },
   {
-    icon: "PagesIcon",
-    name: "Pages",
-    routes: [
-      // submenu
-      {
-        path: "/login",
-        name: "Login",
-      },
-    ],
+    path: "/app/listaSolicitudEnviado",
+    icon: "ListIcon",
+    name: "Lista Solicitud Enviado",
+  },
+  {
+    path: "/app/listaTrabajoCreado",
+    icon: "ListIcon1",
+    name: "Lista Trabajo Creado",
   },
 ];
 

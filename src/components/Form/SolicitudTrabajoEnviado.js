@@ -21,10 +21,10 @@ import { getUsuario } from "../../redux/actions/usuario";
 import { getCv } from "../../redux/actions/cv";
 import { loadUser } from "../../redux/actions/auth";
 import { getPublicacionTrabajo } from "../../redux/actions/publicacionTrabajo";
-import { getAllSolicitudTrabajo } from "../../redux/actions/solicitudTrabajo";
+import { getAllSolicitudTrabajoByDesempleo } from "../../redux/actions/solicitudTrabajo";
 import { useParams } from "react-router-dom";
 
-const SolicitudTrabajo = (props) => {
+const SolicitudTrabajoEnviado = (props) => {
   const {
     isAuthenticated,
     loading,
@@ -37,7 +37,7 @@ const SolicitudTrabajo = (props) => {
     cv,
     getUsuario,
     getPublicacionTrabajo,
-    getAllSolicitudTrabajo,
+    getAllSolicitudTrabajoByDesempleo,
   } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -57,7 +57,9 @@ const SolicitudTrabajo = (props) => {
 
   useEffect(() => {
     loadUser();
-    getAllSolicitudTrabajo(idPublicacionTrabajo.id);
+    getAllSolicitudTrabajoByDesempleo({
+      idDesempleo: user?._id ? user._id : "",
+    });
     getUsuario();
     loadUser();
   }, []);
@@ -177,7 +179,7 @@ const SolicitudTrabajo = (props) => {
   );
 };
 
-SolicitudTrabajo.prototype = {
+SolicitudTrabajoEnviado.prototype = {
   isAuthenticated: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
@@ -200,9 +202,12 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   getUsuario,
   getPublicacionTrabajo,
-  getAllSolicitudTrabajo,
+  getAllSolicitudTrabajoByDesempleo,
   loadUser,
   getCv,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SolicitudTrabajo);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SolicitudTrabajoEnviado);

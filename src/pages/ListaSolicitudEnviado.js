@@ -1,35 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import PageTitle from "../components/Typography/PageTitle";
 //redux
 import { loadUser } from "../redux/actions/auth";
-import { getUsuario, getAllUsuario } from "../redux/actions/usuario";
-import { getAllPublicacionTrabajo } from "../redux/actions/publicacionTrabajo";
-import { getAllSolicitudTrabajo } from "../redux/actions/solicitudTrabajo";
+import { getUsuario } from "../redux/actions/usuario";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { HalfCircleSpinner } from "react-epic-spinners";
 import { Redirect } from "react-router-dom";
-import Estadistica from "../components/Cards/Estadistica";
+import SolicitudTrabajoEnviado from "../components/Form/SolicitudTrabajoEnviado";
 
-const Inicio = (props) => {
-  const {
-    isAuthenticated,
-    loading,
-    loadUser,
-    getUsuario,
-    usuario,
-    user,
-    getAllPublicacionTrabajo,
-    getAllSolicitudTrabajo,
-    getAllUsuario,
-    publicacionTrabajo,
-    solicitudTrabajo,
-  } = props;
-
-  const [countUser, setCountUser] = useState([]);
-  const [countSolicitud, setCountSolicitud] = useState([]);
-  const [countTrabajo, setCountTrabajo] = useState([]);
+const ListaSolicitud = (props) => {
+  const { isAuthenticated, loading, loadUser, getUsuario, usuario, user } =
+    props;
 
   useEffect(() => {
     getUsuario().then((usuario) => {
@@ -43,8 +26,9 @@ const Inicio = (props) => {
           {!usuario._empresa && !usuario._desempleo ? (
             <Redirect to="./editprofile" />
           ) : null}
-          <PageTitle>Inicio</PageTitle>
-          <Estadistica usuario={usuario} />
+          {!usuario._desempleo ? <Redirect to="./listaTrabajoCreado" /> : null}
+          <PageTitle>Lista Solicitud Enviado</PageTitle>
+          <SolicitudTrabajoEnviado />
         </>
       ) : (
         <HalfCircleSpinner
@@ -62,7 +46,7 @@ const Inicio = (props) => {
   );
 };
 
-Inicio.prototype = {
+ListaSolicitud.prototype = {
   isAuthenticated: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
@@ -79,9 +63,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   loadUser,
   getUsuario,
-  getAllPublicacionTrabajo,
-  getAllSolicitudTrabajo,
-  getAllUsuario,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Inicio);
+export default connect(mapStateToProps, mapDispatchToProps)(ListaSolicitud);

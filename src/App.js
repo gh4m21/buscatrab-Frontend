@@ -13,6 +13,8 @@ import store from "./redux/store";
 import { loadUser } from "./redux/actions/auth";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Layout = lazy(() => import("./containers/Layout"));
 const Login = lazy(() => import("./pages/Login"));
@@ -31,6 +33,7 @@ function App() {
 
           {/* Place new routes over this */}
           <Route path="/app" component={Layout} />
+          <ToastContainer autoclose={5000} />
           {/* If you have an index page, you can remothis Redirect */}
           <Redirect exact from="/" to="/Login" />
         </Switch>

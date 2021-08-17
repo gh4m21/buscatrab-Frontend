@@ -44,7 +44,7 @@ const CreateAccount = (props) => {
   };
 
   if (isAuthenticated) {
-    window.location.href = "app/editprofile";
+    window.location.href = "../../app/editprofile";
   }
 
   return (

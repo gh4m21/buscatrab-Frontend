@@ -49,7 +49,7 @@ const Layout = ({ auth: isAuthenticated, loading }) => {
                   />
                 ) : null;
               })}
-              <Redirect exact from="/app" to="/app/dashboard" />
+              <Redirect exact from="/app" to="/app/inicio" />
               <Route component={Page404} />
             </Switch>
           </Suspense>

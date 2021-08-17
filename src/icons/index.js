@@ -30,6 +30,10 @@ import { ReactComponent as GoogleIcon } from "./google.svg";
 import { ReactComponent as CalendarIcon } from "./calendar.svg";
 import { ReactComponent as AvatarIcon } from "./avatar.svg";
 import { ReactComponent as LinkIcon } from "./link.svg";
+import { ReactComponent as ListIcon } from "./list.svg";
+import { ReactComponent as ListIcon1 } from "./files.svg";
+import { ReactComponent as AddIcon } from "./add-documents.svg";
+import { ReactComponent as ViewIcon } from "./view.svg";
 
 export {
   ButtonsIcon,
@@ -64,4 +68,8 @@ export {
   CalendarIcon,
   AvatarIcon,
   LinkIcon,
+  ListIcon,
+  ViewIcon,
+  ListIcon1,
+  AddIcon,
 };
